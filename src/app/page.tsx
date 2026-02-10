@@ -145,55 +145,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Free Forever */}
       <section id="pricing" className="relative z-10 py-32 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-20"
+            className="text-center glass-card p-12 md:p-16"
           >
+            <div className="text-6xl mb-6">🎁</div>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Simple, <span className="gradient-text">Transparent</span> Pricing
+              <span className="gradient-text">100% Free</span> Forever
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Start free. Scale when you&apos;re ready.
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+              No subscriptions. No hidden fees. Build unlimited websites at no cost.
+              Your sites deploy to your own Vercel account.
             </p>
+            <div className="flex flex-wrap justify-center gap-4 text-gray-300">
+              <span className="flex items-center gap-2"><span className="text-green-400">✓</span> Unlimited sites</span>
+              <span className="flex items-center gap-2"><span className="text-green-400">✓</span> Free Vercel hosting</span>
+              <span className="flex items-center gap-2"><span className="text-green-400">✓</span> Custom domains</span>
+              <span className="flex items-center gap-2"><span className="text-green-400">✓</span> No branding</span>
+            </div>
           </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <PricingCard
-              name="Free"
-              price="$0"
-              period="/forever"
-              features={[
-                "1 site per month",
-                "forge.app subdomain",
-                "Basic templates",
-                "Community support",
-              ]}
-              cta="Start Free"
-              delay={0.1}
-            />
-            <PricingCard
-              name="Pro"
-              price="$19"
-              period="/month"
-              features={[
-                "Unlimited sites",
-                "Custom domains",
-                "Premium templates",
-                "Priority support",
-                "Analytics dashboard",
-                "No FORGE branding",
-              ]}
-              cta="Go Pro"
-              featured
-              delay={0.2}
-            />
-          </div>
         </div>
       </section>
 
