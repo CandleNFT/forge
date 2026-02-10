@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FloatingOrbs } from "@/components/FloatingOrbs";
 import { Navigation } from "@/components/Navigation";
+import { AuthGuard } from "@/components/AuthGuard";
 import confetti from "canvas-confetti";
 
 type BuildStep = {
@@ -16,10 +16,17 @@ type BuildStep = {
 };
 
 const initialSteps: BuildStep[] = [
-  { id: "ignite", emoji: "🔥", text: "Bobert is firing up...", complete: false },
-  { id: "construct", emoji: "🏗️", text: "Bobert is building your pages...", complete: false },
-  { id: "style", emoji: "🎨", text: "Bobert is making it beautiful...", complete: false },
-  { id: "deploy", emoji: "🚀", text: "Bobert is deploying to Vercel...", complete: false },
+  { id: "ignite", emoji: "🔥", text: "Igniting build engine...", complete: false },
+  { id: "construct", emoji: "🏗️", text: "Constructing pages...", complete: false },
+  { id: "style", emoji: "🎨", text: "Applying styles...", complete: false },
+  { id: "deploy", emoji: "🚀", text: "Deploying to Vercel...", complete: false },
+];
+
+const bobert_messages = [
+  "Bobert is reading your vision...",
+  "Bobert is crafting something beautiful...",
+  "Bobert is adding the finishing touches...",
+  "Bobert is deploying to the cloud...",
 ];
 
 const styleOptions = [
@@ -36,8 +43,7 @@ const colorPresets = [
   { id: "midnight", colors: ["#1e293b", "#475569"], label: "Midnight" },
 ];
 
-export default function BuildPage() {
-  const router = useRouter();
+function BuildPageContent() {
   const [prompt, setPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("minimal");
   const [selectedColor, setSelectedColor] = useState("purple");
@@ -46,17 +52,7 @@ export default function BuildPage() {
   const [currentStep, setCurrentStep] = useState(-1);
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-
-  // Check for Vercel setup
-  useEffect(() => {
-    const setupComplete = localStorage.getItem("forge_setup_complete");
-    if (!setupComplete) {
-      router.push("/setup");
-    } else {
-      setIsReady(true);
-    }
-  }, [router]);
+  const [bobertMessage, setBobertMessage] = useState("");
 
   const handleBuild = async () => {
     if (!prompt.trim()) return;
@@ -66,9 +62,10 @@ export default function BuildPage() {
     setCurrentStep(0);
     setDeployedUrl(null);
 
-    // Simulate build process
+    // Simulate build process with Bobert messages
     for (let i = 0; i < steps.length; i++) {
       setCurrentStep(i);
+      setBobertMessage(bobert_messages[i]);
       await new Promise((resolve) => setTimeout(resolve, 2500));
       setSteps((prev) =>
         prev.map((step, index) =>
@@ -114,6 +111,7 @@ export default function BuildPage() {
     setCurrentStep(-1);
     setDeployedUrl(null);
     setPrompt("");
+    setBobertMessage("");
   };
 
   return (
@@ -140,13 +138,13 @@ export default function BuildPage() {
                     transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                     className="text-6xl mb-4"
                   >
-                    🔥
+                    🤖
                   </motion.div>
                   <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                    What will you <span className="gradient-text">FORGE</span>?
+                    What should <span className="gradient-text">Bobert</span> build?
                   </h1>
                   <p className="text-gray-400 text-lg">
-                    Describe your dream website and watch the magic happen
+                    Tell me about your dream website and I&apos;ll forge it for you
                   </p>
                 </div>
 
@@ -263,6 +261,11 @@ Example: A modern portfolio website for a UX designer with a dark theme, project
                 >
                   🔥 FORGE IT
                 </motion.button>
+
+                {/* Bobert footer note */}
+                <p className="text-center text-gray-500 text-sm mt-6">
+                  Powered by Bobert 🤖 — Your personal website builder
+                </p>
               </motion.div>
             ) : !deployedUrl ? (
               /* Building Progress */
@@ -277,21 +280,29 @@ Example: A modern portfolio website for a UX designer with a dark theme, project
                 <div className="text-center mb-10">
                   <motion.div
                     animate={{ 
-                      rotate: 360,
+                      rotate: [0, 10, -10, 0],
                       scale: [1, 1.1, 1],
                     }}
                     transition={{ 
-                      rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                      scale: { duration: 1, repeat: Infinity },
+                      duration: 1.5, 
+                      repeat: Infinity,
                     }}
                     className="text-6xl mb-4 inline-block"
                   >
-                    ⚡
+                    🤖
                   </motion.div>
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                    <span className="gradient-text">FORGING</span> Your Website
+                    <span className="gradient-text">Bobert</span> is Building
                   </h2>
-                  <p className="text-gray-400">&ldquo;{prompt.substring(0, 50)}...&rdquo;</p>
+                  <motion.p 
+                    key={bobertMessage}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-purple-300 text-lg"
+                  >
+                    {bobertMessage}
+                  </motion.p>
+                  <p className="text-gray-500 text-sm mt-2">&ldquo;{prompt.substring(0, 50)}...&rdquo;</p>
                 </div>
 
                 {/* Progress Steps */}
@@ -378,7 +389,7 @@ Example: A modern portfolio website for a UX designer with a dark theme, project
                   🎉
                 </motion.div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Your Site is <span className="gradient-text">LIVE!</span>
+                  <span className="gradient-text">Bobert</span> did it!
                 </h2>
                 <p className="text-gray-400 mb-8 text-lg">
                   Your website has been forged and deployed successfully
@@ -436,5 +447,13 @@ Example: A modern portfolio website for a UX designer with a dark theme, project
         </div>
       </section>
     </main>
+  );
+}
+
+export default function BuildPage() {
+  return (
+    <AuthGuard>
+      <BuildPageContent />
+    </AuthGuard>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FloatingOrbs } from "@/components/FloatingOrbs";
 import { Navigation } from "@/components/Navigation";
+import { AuthGuard } from "@/components/AuthGuard";
 
 // Mock data for demo
 const mockSites = [
@@ -33,7 +34,7 @@ const mockSites = [
   },
 ];
 
-export default function DashboardPage() {
+function DashboardContent() {
   return (
     <main className="min-h-screen relative">
       <FloatingOrbs />
@@ -53,7 +54,7 @@ export default function DashboardPage() {
                 Your <span className="gradient-text">Sites</span>
               </h1>
               <p className="text-gray-400 text-lg">
-                Manage and monitor your forged creations
+                Bobert built these for you 🤖
               </p>
             </div>
             <Link href="/build">
@@ -63,7 +64,7 @@ export default function DashboardPage() {
                 className="px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white btn-glow flex items-center gap-2"
               >
                 <span className="text-xl">+</span>
-                Create New Site
+                Ask Bobert to Build
               </motion.button>
             </Link>
           </motion.div>
@@ -104,10 +105,10 @@ export default function DashboardPage() {
                     whileHover={{ rotate: 90 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <span className="text-3xl">+</span>
+                    <span className="text-3xl">🤖</span>
                   </motion.div>
                   <span className="text-lg font-semibold text-gray-400 group-hover:text-white transition-colors">
-                    Create New Site
+                    Ask Bobert for a new site
                   </span>
                 </motion.div>
               </Link>
@@ -121,10 +122,10 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               className="glass-card p-12 text-center"
             >
-              <div className="text-6xl mb-6">🏗️</div>
-              <h2 className="text-2xl font-bold mb-4">No sites yet</h2>
+              <div className="text-6xl mb-6">🤖</div>
+              <h2 className="text-2xl font-bold mb-4">Bobert is ready to help!</h2>
               <p className="text-gray-400 mb-8">
-                Create your first website and see it appear here
+                Describe your dream website and Bobert will build it for you
               </p>
               <Link href="/build">
                 <motion.button
@@ -210,7 +211,7 @@ function SiteCard({
                   isLive ? "bg-green-400 animate-pulse" : "bg-yellow-400"
                 }`}
               />
-              {isLive ? "Live" : "Building"}
+              {isLive ? "Live" : "Bobert is building..."}
             </span>
           </div>
         </div>
@@ -259,5 +260,13 @@ function SiteCard({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <AuthGuard>
+      <DashboardContent />
+    </AuthGuard>
   );
 }
