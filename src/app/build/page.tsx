@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FloatingOrbs } from "@/components/FloatingOrbs";
 import { Navigation } from "@/components/Navigation";
@@ -15,10 +16,10 @@ type BuildStep = {
 };
 
 const initialSteps: BuildStep[] = [
-  { id: "ignite", emoji: "🔥", text: "Igniting build engine...", complete: false },
-  { id: "construct", emoji: "🏗️", text: "Constructing pages...", complete: false },
-  { id: "style", emoji: "🎨", text: "Applying styles...", complete: false },
-  { id: "deploy", emoji: "🚀", text: "Deploying to cloud...", complete: false },
+  { id: "ignite", emoji: "🔥", text: "Bobert is firing up...", complete: false },
+  { id: "construct", emoji: "🏗️", text: "Bobert is building your pages...", complete: false },
+  { id: "style", emoji: "🎨", text: "Bobert is making it beautiful...", complete: false },
+  { id: "deploy", emoji: "🚀", text: "Bobert is deploying to Vercel...", complete: false },
 ];
 
 const styleOptions = [
@@ -36,6 +37,7 @@ const colorPresets = [
 ];
 
 export default function BuildPage() {
+  const router = useRouter();
   const [prompt, setPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("minimal");
   const [selectedColor, setSelectedColor] = useState("purple");
@@ -44,6 +46,17 @@ export default function BuildPage() {
   const [currentStep, setCurrentStep] = useState(-1);
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // Check for Vercel setup
+  useEffect(() => {
+    const setupComplete = localStorage.getItem("forge_setup_complete");
+    if (!setupComplete) {
+      router.push("/setup");
+    } else {
+      setIsReady(true);
+    }
+  }, [router]);
 
   const handleBuild = async () => {
     if (!prompt.trim()) return;

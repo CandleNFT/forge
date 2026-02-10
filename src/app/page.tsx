@@ -252,7 +252,8 @@ export default function Home() {
           </div>
           
           <div className="text-center text-gray-500 mt-12">
-            <p>© 2024 FORGE. All rights reserved. Built with 🔥</p>
+            <p>© 2024 FORGE. All rights reserved.</p>
+            <p className="mt-2">Powered by Bobert 🤖</p>
           </div>
         </div>
       </footer>

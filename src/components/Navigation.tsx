@@ -2,10 +2,22 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { isSetupComplete, clearVercelToken } from "@/lib/auth";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    setIsConnected(isSetupComplete());
+  }, []);
+
+  const handleDisconnect = () => {
+    clearVercelToken();
+    setIsConnected(false);
+    window.location.href = "/setup";
+  };
 
   return (
     <motion.nav 
@@ -33,6 +45,32 @@ export function Navigation() {
             <NavLink href="/#how-it-works">How it Works</NavLink>
             <NavLink href="/#pricing">Pricing</NavLink>
             <NavLink href="/dashboard">Dashboard</NavLink>
+            
+            {/* Vercel Connection Status */}
+            {isConnected && (
+              <div className="relative group">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30"
+                >
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-sm text-green-400">Vercel Connected</span>
+                </motion.div>
+                
+                {/* Dropdown on hover */}
+                <div className="absolute top-full right-0 mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="glass rounded-xl p-2 min-w-[160px]">
+                    <button
+                      onClick={handleDisconnect}
+                      className="w-full text-left px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    >
+                      Disconnect
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* CTA Button */}
@@ -88,6 +126,23 @@ export function Navigation() {
             <MobileNavLink href="/dashboard" onClick={() => setIsOpen(false)}>
               Dashboard
             </MobileNavLink>
+            
+            {/* Mobile Vercel Status */}
+            {isConnected && (
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-sm text-green-400">Vercel Connected</span>
+                </div>
+                <button
+                  onClick={handleDisconnect}
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Disconnect
+                </button>
+              </div>
+            )}
+            
             <Link href="/build" onClick={() => setIsOpen(false)}>
               <motion.button
                 whileTap={{ scale: 0.95 }}
